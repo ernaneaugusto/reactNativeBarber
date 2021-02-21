@@ -9,8 +9,8 @@ import AppStyles from "./../config/styles";
 const App: React.FC = () => {
   return (
     <NavigationContainer>
-      <StatusBar barStyle="light-content" backgroundColor={AppStyles.bgColor} />
-      <View style={{ flex: 1, backgroundColor: AppStyles.bgColor }}>
+      <StatusBar barStyle="light-content" backgroundColor={AppStyles.grayDark} />
+      <View style={{ flex: 1, backgroundColor: AppStyles.grayDark }}>
         <Routes />
       </View>
     </NavigationContainer>
