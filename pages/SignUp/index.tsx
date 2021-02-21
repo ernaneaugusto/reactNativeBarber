@@ -17,8 +17,11 @@ import {
   BackToSignInButton,
   BackToSignInText,
 } from "./styles";
+import { useNavigation } from "@react-navigation/native";
 
 const SignUp: React.FC = () => {
+  const navigation = useNavigation();
+
   return (
     <>
       {/**
@@ -56,8 +59,6 @@ const SignUp: React.FC = () => {
             </View>
 
             <Input name="name" icon="user" placeholder="Nome" />
-            <Input name="name" icon="user" placeholder="Nome" />
-            <Input name="name" icon="user" placeholder="Nome" />
             <Input name="email" icon="mail" placeholder="E-mail" />
             <Input name="passowrd" icon="lock" placeholder="Senha" />
             <Button onPress={() => console.log("Clicou")}>Entrar</Button>
@@ -65,7 +66,10 @@ const SignUp: React.FC = () => {
         </ScrollView>
       </KeyboardAvoidingView>
 
-      <BackToSignInButton activeOpacity={0.7}>
+      <BackToSignInButton
+        activeOpacity={0.7}
+        onPress={() => navigation.goBack()}
+      >
         <Icon name="srrow-left" size={20} color={AppStyles.grayLight} />
         <BackToSignInText>Voltar para Login</BackToSignInText>
       </BackToSignInButton>

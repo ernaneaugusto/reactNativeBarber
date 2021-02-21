@@ -11,6 +11,7 @@ import Input from "./../../src/components/Input";
 import logoImg from "./../../src/assets/logo.png";
 import Icon from "react-native-vector-icons/Feather";
 import AppStyles from "./../../config/styles";
+import { useNavigation } from "@react-navigation/native";
 import {
   Container,
   Title,
@@ -21,6 +22,8 @@ import {
 } from "./styles";
 
 const SignIn: React.FC = () => {
+  const navigation = useNavigation();
+
   return (
     <>
       {/**
@@ -35,17 +38,16 @@ const SignIn: React.FC = () => {
         behavior={Platform.OS === "ios" ? "padding" : undefined}
         enabled
       >
-
         {/**
-             * ScrollView: Tera a funcao de permitir o scroll da tela
-             * com o teclado aberto
-             * 
-             * keyboardShouldPersistTaps: Adiciona o comportamento padrao
-             * do sistema para acao fechar ou nao de clicar fora do teclado
-             * */}
+         * ScrollView: Tera a funcao de permitir o scroll da tela
+         * com o teclado aberto
+         *
+         * keyboardShouldPersistTaps: Adiciona o comportamento padrao
+         * do sistema para acao fechar ou nao de clicar fora do teclado
+         * */}
         <ScrollView
           keyboardShouldPersistTaps="handled"
-          contentContainerStyle={{flex: 1}}
+          contentContainerStyle={{ flex: 1 }}
         >
           <Container>
             <Image source={logoImg} />
@@ -69,7 +71,10 @@ const SignIn: React.FC = () => {
         </ScrollView>
       </KeyboardAvoidingView>
 
-      <CreateAccountButton activeOpacity={0.7}>
+      <CreateAccountButton
+        onPress={() => navigation.navigate("SignUp")}
+        activeOpacity={0.7}
+      >
         <Icon name="log-in" size={20} color={AppStyles.orange} />
         <CreateAccountText>Criar uma conta</CreateAccountText>
       </CreateAccountButton>
