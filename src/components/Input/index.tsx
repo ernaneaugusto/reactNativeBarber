@@ -1,4 +1,11 @@
-import React, { useRef, useEffect, useImperativeHandle, forwardRef } from "react";
+import React, {
+  useState,
+  useCallback,
+  useRef,
+  useEffect,
+  useImperativeHandle,
+  forwardRef,
+} from "react";
 import { TextInputProps } from "react-native";
 import { Container, TextInput, Icon } from "./styles";
 import AppStyles from "./../../../config/styles";
@@ -27,6 +34,18 @@ const Input: React.ForwardRefRenderFunction<InputRef, InputProps> = (
   const { registerField, defaultValue = "", fieldName, error } = useField(name);
   const inputValueRef = useRef<InputValueRef>({ value: defaultValue });
 
+  const [isFocused, setIsFocused] = useState(false);
+  const [isFilled, setIsFilled] = useState(false);
+
+  const handleInputFocus = useCallback(() => {
+    setIsFocused(true);
+  }, []);
+
+  const handleInputBlur = useCallback(() => {
+    setIsFocused(false);
+    setIsFilled(!!inputValueRef.current.value);
+  }, []);
+
   // envia informacoes do componente filho para o componente pai
   useImperativeHandle(ref, () => ({
     focus() {
@@ -51,10 +70,12 @@ const Input: React.ForwardRefRenderFunction<InputRef, InputProps> = (
   }, [fieldName, registerField]);
 
   return (
-    <Container>
-      <Icon name={icon} size={20} color={AppStyles.gray} />
+    <Container isFocused={isFocused}>
+      <Icon name={icon} size={20} color={isFocused || isFilled ? AppStyles.orange : AppStyles.gray} />
       <TextInput
         ref={inputElementRef}
+        onFocus={handleInputFocus}
+        onBlur={handleInputBlur}
         placeholderTextColor={AppStyles.gray}
         keyboardAppearance="dark"
         onChangeText={(value: string) => (inputValueRef.current.value = value)}
