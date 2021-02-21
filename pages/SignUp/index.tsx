@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import {
   Image,
   View,
@@ -18,9 +18,16 @@ import {
   BackToSignInText,
 } from "./styles";
 import { useNavigation } from "@react-navigation/native";
+import { FormHandles } from "@unform/core";
+import { Form } from "@unform/mobile";
 
 const SignUp: React.FC = () => {
+  const formRef = useRef<FormHandles>(null);
   const navigation = useNavigation();
+
+  const handleSignUp = (data: any) => {
+    console.log("## data SignUp", data);
+  };
 
   return (
     <>
@@ -58,10 +65,18 @@ const SignUp: React.FC = () => {
               <Title>Crie sua conta</Title>
             </View>
 
-            <Input name="name" icon="user" placeholder="Nome" />
-            <Input name="email" icon="mail" placeholder="E-mail" />
-            <Input name="passowrd" icon="lock" placeholder="Senha" />
-            <Button onPress={() => console.log("Clicou")}>Entrar</Button>
+            <Form
+              style={{ flex: 1, width: "100%" }}
+              ref={formRef}
+              onSubmit={handleSignUp}
+            >
+              <Input name="name" icon="user" placeholder="Nome" />
+              <Input name="email" icon="mail" placeholder="E-mail" />
+              <Input name="passowrd" icon="lock" placeholder="Senha" />
+              <Button onPress={() => formRef.current?.submitForm()}>
+                Entrar
+              </Button>
+            </Form>
           </Container>
         </ScrollView>
       </KeyboardAvoidingView>

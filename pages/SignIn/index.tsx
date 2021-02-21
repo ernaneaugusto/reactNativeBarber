@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useRef } from "react";
 import {
   Image,
   View,
@@ -20,9 +20,16 @@ import {
   CreateAccountButton,
   CreateAccountText,
 } from "./styles";
+import { Form } from "@unform/mobile";
+import { FormHandles } from "@unform/core";
 
 const SignIn: React.FC = () => {
   const navigation = useNavigation();
+  const formRef = useRef<FormHandles>(null);
+
+  const handleSignIn = useCallback((data: object) => {
+    console.log("### SignIn", data);
+  }, []);
 
   return (
     <>
@@ -60,13 +67,20 @@ const SignIn: React.FC = () => {
               <Title>Fazer login</Title>
             </View>
 
-            <Input name="email" icon="mail" placeholder="E-mail" />
-            <Input name="passowrd" icon="lock" placeholder="Senha" />
-            <Button onPress={() => console.log("Clicou")}>Entrar</Button>
-
-            <ForgotPassword>
-              <ForgotPasswordText>Esqueci minha senha</ForgotPasswordText>
-            </ForgotPassword>
+            <Form
+              style={{ flex: 1, width: "100%" }}
+              ref={formRef}
+              onSubmit={handleSignIn}
+            >
+              <Input name="email" icon="mail" placeholder="E-mail" />
+              <Input name="passowrd" icon="lock" placeholder="Senha" />
+              <Button onPress={() => formRef.current?.submitForm()}>
+                Entrar
+              </Button>
+              <ForgotPassword>
+                <ForgotPasswordText>Esqueci minha senha</ForgotPasswordText>
+              </ForgotPassword>
+            </Form>
           </Container>
         </ScrollView>
       </KeyboardAvoidingView>
