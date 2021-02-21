@@ -5,6 +5,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  TextInput,
 } from "react-native";
 import Button from "./../../src/components/Button";
 import Input from "./../../src/components/Input";
@@ -24,6 +25,9 @@ import { Form } from "@unform/mobile";
 const SignUp: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
   const navigation = useNavigation();
+
+  const emailInputRef = useRef<TextInput>(null);
+  const passwordInputRef = useRef<TextInput>(null);
 
   const handleSignUp = (data: any) => {
     console.log("## data SignUp", data);
@@ -70,9 +74,35 @@ const SignUp: React.FC = () => {
               ref={formRef}
               onSubmit={handleSignUp}
             >
-              <Input name="name" icon="user" placeholder="Nome" />
-              <Input name="email" icon="mail" placeholder="E-mail" />
-              <Input name="passowrd" icon="lock" placeholder="Senha" />
+              <Input
+                autoCapitalize={"words"}
+                name="name"
+                icon="user"
+                placeholder="Nome"
+                returnKeyType="next"
+                onSubmitEditing={() => emailInputRef.current?.focus()}
+              />
+              <Input
+                ref={emailInputRef}
+                onSubmitEditing={() => passwordInputRef.current?.focus()}
+                keyboardType="email-address"
+                autoCorrect={false}
+                autoCapitalize="none"
+                name="email"
+                icon="mail"
+                placeholder="E-mail"
+                returnKeyType="next"
+              />
+              <Input
+                ref={passwordInputRef}
+                secureTextEntry
+                name="passowrd"
+                icon="lock"
+                placeholder="Senha"
+                textContentType="newPassword"
+                returnKeyType="send"
+                onSubmitEditing={() => formRef.current?.submitForm()}
+              />
               <Button onPress={() => formRef.current?.submitForm()}>
                 Entrar
               </Button>
