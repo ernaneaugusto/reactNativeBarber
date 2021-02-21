@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useImperativeHandle, forwardRef } from "react";
 import { TextInputProps } from "react-native";
 import { Container, TextInput, Icon } from "./styles";
 import AppStyles from "./../../../config/styles";
@@ -13,11 +13,26 @@ interface InputValueRef {
   value: string;
 }
 
-const Input: React.FC<InputProps> = ({ name, icon, ...rest }) => {
+interface InputRef {
+  focus(): void;
+}
+
+// ForwardRefRenderFunction: Utilizado em componentes que precisam receber uma ref
+const Input: React.ForwardRefRenderFunction<InputRef, InputProps> = (
+  { name, icon, ...rest },
+  ref,
+) => {
   const inputElementRef = useRef<any>(null);
   // defaultValue: deixar acima do inputValueRef passando seu valor para inputValueRef
   const { registerField, defaultValue = "", fieldName, error } = useField(name);
   const inputValueRef = useRef<InputValueRef>({ value: defaultValue });
+
+  // envia informacoes do componente filho para o componente pai
+  useImperativeHandle(ref, () => ({
+    focus() {
+      inputElementRef.current.focus();
+    },
+  }));
 
   useEffect(() => {
     registerField({
@@ -31,7 +46,7 @@ const Input: React.FC<InputProps> = ({ name, icon, ...rest }) => {
       clearValue: () => {
         inputValueRef.current.value = "";
         inputElementRef.current.clear();
-      }
+      },
     });
   }, [fieldName, registerField]);
 
@@ -50,4 +65,5 @@ const Input: React.FC<InputProps> = ({ name, icon, ...rest }) => {
   );
 };
 
-export default Input;
+// forwardRef: adicionado em componentes que exportam uma ref para componentes pai
+export default forwardRef(Input);
