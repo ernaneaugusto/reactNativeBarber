@@ -4,6 +4,7 @@ const AppStyles = {
   grayExtremeDark: "#232129",
   grayLight: "#f4ede8",
   orange: "#ff9000",
+  red: "#c53030",
   white: "#fff",
   bdRadiusDefault: "10px",
   btnHeightDefault: "60px",

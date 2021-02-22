@@ -4,6 +4,7 @@ import AppStyles from "./../../../config/styles";
 
 interface ContainerProps {
   isFocused: boolean;
+  isErrored: boolean;
 }
 
 export const Container = styled.View<ContainerProps>`
@@ -16,6 +17,12 @@ export const Container = styled.View<ContainerProps>`
   flex-direction: row;
   align-items: center;
   border: 2px solid transparent;
+
+  ${(props: ContainerProps) =>
+    props.isErrored &&
+    css`
+      border-color: ${AppStyles.red};
+    `}
 
   ${(props: ContainerProps) =>
     props.isFocused &&

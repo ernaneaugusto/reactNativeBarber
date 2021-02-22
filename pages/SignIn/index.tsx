@@ -6,6 +6,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   TextInput,
+  Alert,
 } from "react-native";
 import Button from "./../../src/components/Button";
 import Input from "./../../src/components/Input";
@@ -23,15 +24,52 @@ import {
 } from "./styles";
 import { Form } from "@unform/mobile";
 import { FormHandles } from "@unform/core";
+import getValidationErrors from "./../../src/utils/getValidationsErros";
+import * as Yup from "yup";
+
+interface SignInFormData {
+  email: string;
+  password: string;
+}
 
 const SignIn: React.FC = () => {
   const navigation = useNavigation();
   const formRef = useRef<FormHandles>(null);
   const passwordInputRef = useRef<TextInput>(null);
-  passwordInputRef.current?.focus();
+  // passwordInputRef.current?.focus();
 
-  const handleSignIn = useCallback((data: object) => {
-    console.log("### SignIn", data);
+  const handleSignIn = useCallback(async (data: SignInFormData) => {
+    try {
+      formRef.current?.setErrors({});
+
+      const schema = Yup.object().shape({
+        email: Yup.string().required("E-mail obrigatório"),
+        password: Yup.string().required("E-mail obrigatório"),
+      });
+
+      await schema.validate(data, {
+        abortEarly: false,
+      });
+
+      // await signIn({
+      //   email: data.email,
+      //   password: data.password,
+      // });
+
+      // history.push('/dashboard');
+    } catch (err) {
+
+      if (err instanceof Yup.ValidationError) {
+        const errors = getValidationErrors(err);
+        formRef.current?.setErrors(errors);
+        return;
+      }
+
+      Alert.alert(
+        "Erro na autenticação",
+        "Ocorreu um erro ao fazer login, cheque as credenciais.",
+      );
+    }
   }, []);
 
   return (
@@ -87,7 +125,7 @@ const SignIn: React.FC = () => {
               />
               <Input
                 ref={passwordInputRef}
-                name="passowrd"
+                name="password"
                 icon="lock"
                 placeholder="Senha"
                 secureTextEntry
